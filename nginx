@@ -29,3 +29,5 @@ rm -rf /etc/nginx/sites-available.d/default.conf
 ln -s /etc/nginx/sites-available.d /proxy.conf /etc/nginx/sites-enabled.d/
 ls -la /etc/nginx/sites-enabled
 systemctl restart nginx
+
+apt-get install yandex-browser-stable
