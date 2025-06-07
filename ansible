@@ -1,0 +1,54 @@
+BR-SRV
+apt-get install ansible -y
+vim /etc/ansible/hosts
+VMs:
+ hosts:
+  HQ-SRV:
+   ansible_host: 192.168.1.10
+   ansible_user: sshuser
+   ansible_port: 2024
+  HQ-CLI:
+   ansible_host: 192.168.2.10
+   ansible_user: sshuser
+   ansible_port: 2024
+  HQ-RTR:
+   ansible_host: 192.168.1.1
+   ansible_user: net_admin
+   ansible_password: P@ssw0rd
+   ansible_connection: network_cli
+   ansible_network_os: ios
+  BR-RTR
+   ansible_host: 192.168.3.1
+   ansible_user: net_admin
+   ansible_password: P@ssw0rd
+   ansible_connection: network_cli
+   ansible_network_os: ios
+vim /etc/ansible/ansible.cfg
+[defaults]
+ansible_python_interpreter=/usr/bin/python3
+interpreter_python=auto_silent
+ansible_host_key_checking=false
+
+HQ-CLI
+useradd sshuser –u 1010
+passwd sshuser
+P@ssw0rd
+P@ssw0rd
+visudo
+WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL
+gpasswd -a “sshuser” wheel
+vim /etc/openssh/sshd_config
+Port 2024
+AllowUsers sshuser
+MaxAuthTries 2
+PasswordAuthentication yes
+Banner /etc/openssh/banner
+vim /etc/openssh/banner
+Authorized access only
+systemctl restart sshd
+
+BR-SRV
+ssh-keygen -t rsa
+ssh-copy-id -p 2024 sshuser@192.168.1.10
+ssh-copy-id -p 2024 sshuser@192.168.2.10
+ansible all -m ping
