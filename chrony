@@ -1,0 +1,38 @@
+ISP
+apt-get install chrony -y
+vim /etc/chrony.conf
+# pool, makestep, rtcsync, ntsdumpdir
+server 127.0.0.1 iburst prefer
+hwtimestamp *
+local stratum 5
+allow 0/0
+systemctl enable --now chronyd
+systemctl restart chronyd
+chronyc sources
+chronyc tracking | grep Stratum
+
+HQ-RTR
+conf t
+ntp server 172.16.4.1
+ntp timezone utc+5
+exit
+show ntp status
+write memory
+  
+BR-RTR
+conf t
+ntp server 172.16.5.1
+ntp timezone utc+5
+exit
+show ntp status
+write memory
+  
+BR-SRV
+apt-get install chrony -y
+vim /etc/chrony.conf
+# pool, makestep, rtcsync, ntsdumpdir
+server 172.16.5.1 iburst prefer
+systemctl enable --now chronyd
+systemctl restart chronyd
+chronyc sources
+timedatectl
