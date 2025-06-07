@@ -1,0 +1,56 @@
+BR-SRV
+apt-get install docker-compose docker-engine -y
+systemctl enable --now docker
+systemctl status docker
+docker pull mediawiki
+docker pull mariadb
+vim /root/wiki.yml 
+services:
+ mariadb:
+  image: mariadb
+  container_name: mariadb
+  restart: always
+  environment:
+   MYSQL_ROOT_PASSWORD: P@ssw0rd
+   MYSQL_DATABASE: mediawiki
+   MYSQL_USER: wiki
+   MYSQL_PASSWORD: P@ssw0rd
+  volumes: [ mariadb_data:/var/lib/mysql ]
+ wiki:
+  image: mediawiki
+  container_name: wiki
+  restart: always
+  environment:
+   MEDIAWIKI_DB_HOST: mariadb
+   MEDIAWIKI_DB_USER: wiki
+   MEDIAWIKI_DB_PASSWORD: P@ssw0rd
+   MEDIAWIKI_DB_NAME: mediawiki
+  ports:
+   - "8080:80"
+  #volumes: [ /root/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php ]
+volumes:
+ mariadb_data:
+docker compose -f /root/wiki.yml up -d
+
+HQ-CLI
+systemctl restart network
+FireFox > http://192.168.3.10:8080
+Setup MediaWiki
+Язык - Русский
+Хост базы данных - mariadb
+Имя базы данных - mediawiki
+Имя пользователя - wiki
+Пароль - P@ssw0rd
+Название вики - Wiki
+Имя участника - wiki
+Пароль - WikiP@ssw0rd
+•	Хватит уже, просто установить вики.
+scp -P 2024 /home/user/Downloads/LocalSettings.php sshuser@192.168.3.10:/home/sshuser/
+
+BR-SRV
+rm -rf /root/LocalSettings.php
+mkdir /root/mediawiki
+mv /home/sshuser/LocalSettings.php /root/mediawiki/
+vim /root/wiki.yml раскоментировать строку
+docker compose -f /root/wiki.yml up -d
+systemctl restart docker
