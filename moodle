@@ -1,0 +1,47 @@
+HQ-SRV
+apt-get update && apt-get install 
+apache2 
+php8.2 
+apache2-mod_php8.2
+mariadb-server 
+php8.2-curl 
+php8.2-fileinfo 
+php8.2-gd 
+php8.2-intl 
+php8.2-json 
+php8.2-ldap 
+php8.2-mbstring 
+php8.2-mysqli 
+php8.2-opcache 
+php8.2-soap 
+php8.2-sodium
+php8.2-xml 
+php8.2-xmlreader php8.2-xmlrpc php8.2-zip 
+
+systemctl enable -–now httpd2 mysqld
+mysql_secure_installation
+Enter
+Y
+P@ssw0rd
+Y
+mariadb -u root -p
+CREATE DATABASE moodledb;
+CREATE USER moodle IDENTIFIED BY ‘P@ssw0rd’;
+GRANT ALL PRIVILEGES ON moodledb.* TO moodle;
+FLUSH PRIVILEGES;
+QUIT;
+curl -L https://github.com/moodle/moodle/archive/refs/tags/v4.5.0.zip > /root/moodle.zip
+
+unzip /root/moodle.zip -d /var/www/html
+mv /var/www/html/moodle-4.5.0/* /var/www/html/
+ls /var/www/html
+
+mkdir /var/www/moodledata
+chown apache2:apache2 /var/www/html
+chown apache2:apache2 /var/www/moodledata
+mcedit /etc/php/8.2/apache2-mod_php/php.ini
+F7 max_input_vars
+max_input_vars = 5000
+cd /var/www/html
+rm index.html
+systemctl restart httpd2
