@@ -1,0 +1,31 @@
+HQ-SRV
+lsblk
+mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sd[b-d]
+mdadm --detail -scan --verbose > /etc/mdadm.conf
+apt-get update && apt-get install fdisk -y
+fdisk /dev/md0
+n Enter x3 w
+mkfs.ext4 /dev/md0p1
+vim /etc/fstab
+/dev/md0p1	/raid5	ext4		defaults		0	0
+mkdir /raid5
+mount -a
+apt-get install nfs-server -y
+mkdir /raid5/nfs
+chown 99:99 /raid5/nfs
+chmod 777 /raid5/nfs
+vim /etc/exports
+/raid5/nfs 192.168.2.0/28(rw,sync,no_subtree_check)
+exportfs -a
+exportfs -v
+systemctl enable nfs
+systemctl restart nfs
+
+HQ-CLI
+apt-get update && apt-get install nfs-clients -y
+mkdir -p /mnt/nfs
+vim /etc/fstab
+192.168.1.10:/raid5/nfs	/mnt/nfs		nfs		intr,soft,_netdev,x-systemd.automount		0	0
+mount -a
+mount -v
+touch /mnt/nfs/test
