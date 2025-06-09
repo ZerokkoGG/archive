@@ -6,21 +6,21 @@ VMs:
   HQ-SRV:
    ansible_host: 192.168.1.10
    ansible_user: sshuser
-   ansible_port: 2024
+   ansible_port: 3010
   HQ-CLI:
    ansible_host: 192.168.2.10
    ansible_user: sshuser
-   ansible_port: 2024
+   ansible_port: 3010
   HQ-RTR:
    ansible_host: 192.168.1.1
    ansible_user: net_admin
-   ansible_password: P@ssw0rd
+   ansible_password: P@$$w0rd
    ansible_connection: network_cli
    ansible_network_os: ios
   BR-RTR
    ansible_host: 192.168.3.1
    ansible_user: net_admin
-   ansible_password: P@ssw0rd
+   ansible_password: P@$$w0rd
    ansible_connection: network_cli
    ansible_network_os: ios
 vim /etc/ansible/ansible.cfg
@@ -38,7 +38,7 @@ visudo
 WHEEL_USERS ALL=(ALL:ALL) NOPASSWD: ALL
 gpasswd -a “sshuser” wheel
 vim /etc/openssh/sshd_config
-Port 2024
+Port 3010
 AllowUsers sshuser
 MaxAuthTries 2
 PasswordAuthentication yes
@@ -49,6 +49,6 @@ systemctl restart sshd
 
 BR-SRV
 ssh-keygen -t rsa
-ssh-copy-id -p 2024 sshuser@192.168.1.10
-ssh-copy-id -p 2024 sshuser@192.168.2.10
+ssh-copy-id -p 3010 sshuser@192.168.1.10
+ssh-copy-id -p 3010 sshuser@192.168.2.10
 ansible all -m ping
