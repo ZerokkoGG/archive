@@ -45,3 +45,4 @@ max_input_vars = 5000
 cd /var/www/html
 rm index.html
 systemctl restart httpd2
+
