@@ -45,7 +45,7 @@ Setup MediaWiki
 Имя участника - wiki
 Пароль - WikiP@ssw0rd
 •	Хватит уже, просто установить вики.
-scp -P 2024 /home/user/Downloads/LocalSettings.php sshuser@192.168.3.10:/home/sshuser/
+scp -P 3010 /home/user/Downloads/LocalSettings.php sshuser@192.168.3.10:/home/sshuser/
 
 BR-SRV
 rm -rf /root/LocalSettings.php
@@ -54,3 +54,4 @@ mv /home/sshuser/LocalSettings.php /root/mediawiki/
 vim /root/wiki.yml раскоментировать строку
 docker compose -f /root/wiki.yml up -d
 systemctl restart docker
+
