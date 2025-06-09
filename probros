@@ -1,19 +1,19 @@
 BR-RTR
 conf t
-ip nat source static tcp 192.168.3.10 8080 172.16.5.5 80
-ip nat source static tcp 192.168.3.10 2024 172.16.5.5 2024
+ip nat source static tcp 192.168.3.10 8080 172.16.50.5 80
+ip nat source static tcp 192.168.3.10 3010 172.16.50.5 3010
 exit
 write 
 
 HQ-RTR
 conf t
-ip nat source static tcp 192.168.1.10 2024 172.16.4.4 2024
+ip nat source static tcp 192.168.1.10 3010 172.16.40.4 3010
 exit
 write 
 
 HQ-CLI
-ssh -p 2024 sshuser@172.16.5.5
-firefox -> http://172.16.5.5
+ssh -p 3010 sshuser@172.16.50.5
+firefox -> http://172.16.50.5
 
 BR-SRV
-ssh -p 2024 sshuser@172.16.4.4
+ssh -p 3010 sshuser@172.16.40.4
